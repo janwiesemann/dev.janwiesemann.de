@@ -73,7 +73,7 @@ $currentTool = GetCurrentTool($allTools);
 									<header class="major">
 										<h2>Open source</h2>
 									</header>
-									<p>Found a bug or want to add something? No problem! Access the full source code at <a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank">GitHub</a>!</p>
+									<p>found a bug or want to add something? no problem! access the full source code at <a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank">GitHub</a>!</p>
 								</section>
 								
 								<section>
