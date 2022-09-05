@@ -1,16 +1,24 @@
-<section id="banner">
-									<div class="content">
-										<header>
-											<h1>Hi, I’m Editorial<br />
-											by HTML5 UP</h1>
-											<p>A free and fully responsive site template</p>
-										</header>
-										<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
-										<ul class="actions">
-											<li><a href="#" class="button big">Learn More</a></li>
-										</ul>
-									</div>
-									<span class="image object">
-										<img src="images/pic10.jpg" alt="" />
-									</span>
-								</section>
+<header>
+	<h1>dev.JANWIESEMANN.de</h1>
+	<span style="text-transform: UPPERCASE">a place from lazy people by lazy people</span>
+</header>
+
+<p>
+	If you like being lazy and want to use some small helpers, this is the place to go. Here you can find a few tools which well help you to overcome the simplest but most annoying challenges of the day.
+</p>
+
+<h2>a list of tools</h2>
+in whatever order the file system reports
+
+<ul>
+	<?php
+		//this section is being called by using PHPs include('');. This is why we have access to all Parameters of the function Tool->IncludeTool(...);
+
+		foreach($allTools as $tool)
+		{
+			?>
+				<li><a href="index.php?id=<?php echo $tool->id ?>"><?php echo $tool->id; ?></a></li>
+			<?php
+		}
+	?>
+</ul>

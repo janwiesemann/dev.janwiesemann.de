@@ -3,6 +3,15 @@
 include_once('tool.php');
 
 $allTools = GetAllTools();
+if(isset($_GET["json"]))
+{
+	//a special switch to get all tools as JSON. Used on https://janwiesemann.de/#devtools.
+
+	header('Content-Type', 'application/json');
+	echo json_encode($allTools);
+	exit();
+}
+
 
 $currentTool = GetCurrentTool($allTools);
 ?>
@@ -21,6 +30,10 @@ $currentTool = GetCurrentTool($allTools);
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
 	<body class="is-preload">
+		
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -31,17 +44,44 @@ $currentTool = GetCurrentTool($allTools);
 
 							<!-- Header -->
 								<header id="header">
-									<a href="index.php?id=<?php echo $currentTool->id; ?>" class="logo"><strong>/dev_tools/<?php echo $currentTool->id; ?></strong></a>
+									<a href="index.php?id=<?php echo $currentTool->id; ?>" class="logo"><strong>/dev_tools/<?php echo $currentTool->id; ?></strong><span style="margin-left: 1em;">the ART of being lazy*</span></a>
 									<ul class="icons">
 										<li><a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank" class="icon brands fa-github"><span class="label">Source on GitHub</span></a></li>
-										<li><a href="https://janwiesemann.de" target="_blank" class="icon fa-globe-europe"><span class="label">Facebook</span></a></li>
+										<li><a href="https://janwiesemann.de" target="_blank" class="icon fa-globe-europe"><span class="label">JANWIESEMANN.de</span></a></li>
 									</ul>
 								</header>
 
 							<!-- Page Content -->
-							<?php
-								$currentTool->IncludeTool($allTools);
-							?>
+								<section>
+									<?php
+										if($currentTool->name != null)
+										{
+											?>
+												<header class="major">
+													<h2><?php echo $currentTool->name; ?></h2>
+												</header>
+											<?php
+										}
+									?>
+																	
+									<?php
+										$currentTool->IncludeTool($allTools);
+									?>
+								</section>
+								
+								<section>
+									<header class="major">
+										<h2>Open source</h2>
+									</header>
+									<p>Found a bug or want to add something? No problem! Access the full source code at <a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank">GitHub</a>!</p>
+								</section>
+								
+								<section>
+									<header class="major">
+										<h2>the ART of being lazy*</h2>
+									</header>
+									<p>* and spending a few hours to develop a tool for a simple task, which would take only a few seconds.</p>
+								</section>
 
 						</div>
 					</div>
@@ -108,6 +148,7 @@ $currentTool = GetCurrentTool($allTools);
 								<footer id="footer">
 									<p class="copyright">by <a href="https://janwiesemann.de" target="_blank">JANWIESEMANN.de</a></p>
 									<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+									<p class="copyright">even tho I like cookies, I hate the European union's stupid cookie messages. This is why this page does not use any cookies and does not collect any data.</p>
 								</footer>
 
 						</div>
@@ -116,9 +157,6 @@ $currentTool = GetCurrentTool($allTools);
 			</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 
