@@ -1,4 +1,18 @@
+# License
+
+I hate web development and this is why this page uses one of [HTML5 UP](https://html5up.net)'s amazing templates. You can find its license down below.
+
+Since He's already picked a quite nice license schema, I've adopted it and all my tool use it as well.
+
+## HTML5 UP
 Creative Commons Attribution 3.0 Unported
+
+## dev.JANWIESEMANN.de
+Creative Commons Attribution 3.0 Unported
+
+---
+
+# Creative Commons Attribution 3.0 Unported
 http://creativecommons.org/licenses/by/3.0/
 
 License

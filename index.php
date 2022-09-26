@@ -1,19 +1,20 @@
 <?php
+require_once('backend/Tools.php');
 
-include_once('tool.php');
+Tools::SetWebRoot(__DIR__);
 
-$allTools = GetAllTools();
 if(isset($_GET["json"]))
 {
-	//a special switch to get all tools as JSON. Used on https://janwiesemann.de/#devtools.
+	//A special switch to get all available tools as JSON. Used on https://janwiesemann.de/#devtools.
 
 	header('Content-Type', 'application/json');
-	echo json_encode($allTools);
+
+	echo json_encode(Tools::GetAllTools());
+	
 	exit();
 }
 
-
-$currentTool = GetCurrentTool($allTools);
+$currentTool = Tools::GetCurrentTool();
 ?>
 
 <!DOCTYPE HTML>
@@ -44,36 +45,25 @@ $currentTool = GetCurrentTool($allTools);
 
 							<!-- Header -->
 								<header id="header">
-									<a href="index.php?id=<?php echo $currentTool->id; ?>" class="logo"><strong>/dev_tools/<?php echo $currentTool->id; ?></strong><span style="margin-left: 1em;">the ART of being lazy*</span></a>
+									<span class="logo"><strong>/dev_tools/<?php echo $currentTool->id; ?></strong><span style="margin-left: 1em;">the ART of being lazy*</span></span>
 									<ul class="icons">
-										<li><a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank" class="icon brands fa-github"><span class="label">Source on GitHub</span></a></li>
+										<li><a href="<?php echo $currentTool->linkGitHub; ?>" target="_blank" class="icon brands fa-github"><span class="label">Source on GitHub</span></a></li>
 										<li><a href="https://janwiesemann.de" target="_blank" class="icon fa-globe-europe"><span class="label">JANWIESEMANN.de</span></a></li>
 									</ul>
 								</header>
 
 							<!-- Page Content -->
-								<section>
-									<?php
-										if($currentTool->name != null)
-										{
-											?>
-												<header class="major">
-													<h2><?php echo $currentTool->name; ?></h2>
-												</header>
-											<?php
-										}
-									?>
-																	
-									<?php
-										$currentTool->IncludeTool($allTools);
-									?>
-								</section>
+								<?php $currentTool->Include(); ?>
 								
 								<section>
 									<header class="major">
-										<h2>Open source</h2>
+										<h2>open source</h2>
 									</header>
-									<p>found a bug or want to add something? no problem! access the full source code at <a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank">GitHub</a>!</p>
+									<p>found a bug or want to add something?</p>
+									<ul>
+										<li><a href="https://github.com/janwiesemann/dev.janwiesemann.de" target="_blank">full repository</a></li>
+										<li><a href="<?php echo $currentTool->linkGitHub; ?>" target="_blank">current tool (<?php echo $currentTool->id; ?>)</a></li>
+									</ul>
 								</section>
 								
 								<section>
@@ -95,44 +85,43 @@ $currentTool = GetCurrentTool($allTools);
 								</header>
 
 							<!-- Search -->
-								<!--<section id="search" class="alt">
-									<form method="post" action="#">
-										<input type="text" name="query" id="query" placeholder="Search" />
+								<section class="search alt">
+									<form method="get">
+										<input type="text" name="tool" id="tool" placeholder="Search" />
 									</form>
-								</section>-->
+								</section>
 
 							<!-- Menu -->
 								<nav id="menu">
 									<header class="major">
-										<h2><a href="index.php">/dev_tools</a></h2>
+										<h2><a href="?">/dev_tools</a></h2>
 									</header>
 
 									<ul>
 										<?php
-
-
-
-											$grouped = array();
-											foreach($allTools as $tool)
+											//Grouping all tools by langauge
+											$groups = array();
+											foreach(Tools::GetAllTools() as $tool)
 											{
-												if(!array_key_exists($tool->language, $grouped)) {
-													$grouped[$tool->language] = array();
+												if(!array_key_exists($tool->language, $groups)) {
+													$groups[$tool->language] = array();
 												}
 
-												array_push($grouped[$tool->language], $tool);
+												array_push($groups[$tool->language], $tool);
 											}
 
-											foreach($grouped as $key => $group)
+											//Adding entries for the menu system
+											foreach($groups as $language => $tools)
 											{
 												?>
 													<li>
-														<span class="opener">/<?php echo $key; ?></span>
+														<span class="opener<?php if($language === $currentTool->language) echo " active"; ?>">/<?php echo $language; ?></span>
 														<ul>
 															<?php
-																foreach($group as $tool)
+																foreach($tools as $tool)
 																{
 																	?>
-																		<li><a href="index.php?id=<?php echo $tool->id ?>">/<?php echo $tool->name; ?></a></li>
+																		<li <?php if($tool === $currentTool) echo 'class="active"'; ?>><a href="<?php echo $tool->linkInternal; ?>">/<?php echo $tool->name; ?></a></li>
 																	<?php
 																}
 															?>
