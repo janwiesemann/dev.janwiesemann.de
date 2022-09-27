@@ -1,6 +1,5 @@
 <?php
 require_once(__DIR__.'/../../SectionTool.php');
-require_once(__DIR__.'/../../Tools.php');
 
 class json_to_nlohmann_json extends SectionTool
 {
