@@ -23,10 +23,10 @@ abstract class TextToTextTool extends SectionTool
                 <tbody>
                     <tr style="background-color: transparent !important; border: none !important;">
                         <td style="padding: 0.5em 0.25em 0px 0px !important;">
-                            <textarea id="input" wrap="off"></textarea>
+                            <textarea id="input" wrap="off" style="font-family: Consolas, monaco, monospace !important;"></textarea>
                         </td>
                         <td style="padding: 0.5em 0px 0px 0.25em !important;">
-                            <textarea id="output" wrap="off" readonly></textarea>
+                            <textarea id="output" wrap="off" style="font-family: Consolas, monaco, monospace !important;" readonly></textarea>
                         </td>
                     </tr>
                 </tbody>
