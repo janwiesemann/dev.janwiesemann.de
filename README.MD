@@ -82,7 +82,7 @@ function Include() : void
 }
 ```
 
-### SectionTool (`backend/SectionTool.php`)
+### SectionTool (`backend/SectionTool.php`; parent: ToolBase)
 This is the default base for most tools. It will display a new section/header on the page. This will also include the description.
 
 ```php
@@ -94,7 +94,37 @@ function IncludeSectionBody() : void
 }
 ```
 
-### SpecialTool (`backend/special/HiddenTool.php`)
+### TextToTextTool (`backend/TextToTextTool.php`); parent: SectionTool)
+This tool will display two textareas. The left one is the input and the right one is the output. This can be used for from 'X' to 'Y' like tools.
+
+```php
+//This should output the conversion code.
+function OutputJSBody() : void
+{
+    function OutputJSBody() : void
+    {
+        ?>
+            <script>
+                //This JavaScript function will be called as soon as the user types something in the input.
+                //It should return a string. This string will be used as the result.
+                //If there is a error in the input, throw a exception. The exception message will be used as the error message.
+                function getOutputResult(inText) {
+                    return "output";
+                }
+            </script>
+        <?php
+    }
+}
+
+//Override/implement this to set a default value for the input.
+//The output has to be valid JS!
+function OutputJSDefaultInputValue() : void //Optional override
+{
+    /* echo '"xvz"'; */
+}
+```
+
+### SpecialTool (`backend/special/HiddenTool.php`; parent: ToolBase)
 Used internally and should not be used as a base.
 
 ## Including a new tool

@@ -7,6 +7,12 @@ abstract class SectionTool extends ToolBase
 {
     protected abstract function IncludeSectionBody() : void;
 
+    protected function OutputDescription() : void
+    {
+        if($this->description !== null)
+            echo '<p>'.$this->description.'</p>';     
+    }
+
     function Include() : void
 	{
         ?>
@@ -16,8 +22,7 @@ abstract class SectionTool extends ToolBase
                 </header>
 
                 <?php
-                    if($this->description !== null)
-                        echo '<p>'.$this->description.'</p>';                
+                    $this->OutputDescription();
                 
                     $this->IncludeSectionBody();
                 ?>        

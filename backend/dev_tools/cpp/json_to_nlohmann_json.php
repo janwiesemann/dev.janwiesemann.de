@@ -1,42 +1,45 @@
 <?php
-require_once(__DIR__.'/../../SectionTool.php');
+require_once(__DIR__.'/../../TextToTextTool.php');
 
-class json_to_nlohmann_json extends SectionTool
+class json_to_nlohmann_json extends TextToTextTool
 {
     public function __construct()
     {
-        parent::__construct('C++', description: 'This tool can convert a plain JSON-Object to a <a href="https://github.com/nlohmann/json" target="_blank">nlohmann::json</a> C++ initializer_list. Just paste the code on the left and examine the result on the right side.');
+        parent::__construct('C++', description: 'This tool can convert a plain JSON-Object to a <a href="https://github.com/nlohmann/json" target="_blank">nlohmann::json</a> C++ initializer_list.');
+    }
+    
+    function OutputJSDefaultInputValue() : void
+    {
+        $obj = array(
+                'string' => 'abc',
+                'int' => 123,
+                'float' => 123.456,
+                'bool'=> true,
+                'null'=> null,
+                'object' => array(
+                    'propA' => 'value',
+                    'propB' => 123,
+                    'propC' => false,
+                    'propD' => array(1, 2, 3)
+                ),
+                'array' => array(
+                    'This is a string',
+                    1,
+                    array(
+                        'prop' => 'value'
+                    ),
+                    array(4, 5, 6)
+                )
+            );
+
+        echo 'JSON.stringify('.json_encode($obj).', null, 4);';
     }
 
-    function IncludeSectionBody(): void
+    function OutputJSBody() : void
     {
         ?>
-            <style>
-                #mainElement {
-                    display: flex;
-                    flex-flow: row;
-                    height: auto;
-                }
-
-                #input, #output {
-                    flex: 50%;
-                    vertical-align: top;
-                    resize: none;
-                    overflow: hidden;
-                }
-
-                .outputError {
-                    color: #f56a6a;
-                }
-            </style>
-
-            <div id="mainElement">
-                <textarea id="input" wrap="off"></textarea>
-                <textarea id="output" wrap="off" readonly></textarea>
-            </div>
-
-            <script>
-                function getIndents(level) {
+        <script>
+            function getIndents(level) {
                 let ret = "";
 
                 for(let i = 0; i < level; i++) {
@@ -141,65 +144,12 @@ class json_to_nlohmann_json extends SectionTool
                 }
             }
 
-            function onInputChanged() {
-                let inText = $(this).val();
+            function getOutputResult(inText) {
+                let j = JSON.parse(inText);
 
-                let outputElement = $('#output');
-
-                try {
-                    let j = JSON.parse(inText);
-
-                    let str = append(0, j, null);
-
-                    outputElement
-                        .val(str)
-                        .removeClass('outputError');
-                }
-                catch(error) {
-                    outputElement
-                        .val(error)
-                        .addClass('outputError');
-                }
-
-                outputElement = outputElement[0];
-
-                outputElement.style.height = 'auto';
-                this.style.height = 'auto';
-
-                let height = Math.max(outputElement.scrollHeight, this.scrollHeight, 250);
-
-                outputElement.style.height = (height) + 'px';
-                this.style.height = (height) + 'px';
+                let str = append(0, j, null);
+                return str;
             }
-
-            (function() {
-            $('#input')
-                    .on("input", onInputChanged)
-                    .val(JSON.stringify( //Default Preview JSON
-                        {
-                            string: "abc",
-                            int: 123,
-                            float: 123.456,
-                            object: {
-                                propA: "valA",
-                                propB: 123,
-                                propC: true,
-                                propD: [ 1, 2, 3 ]
-                            },
-                            nodeArray: [
-                                "This is a string!",
-                                1,
-                                {
-                                    prop: "This is a random value!"
-                                },
-                                [
-                                    "I like potato's!"
-                                ] 
-                            ]
-                        }, null, 4
-                    ))
-                    .trigger('input');
-            })();
             </script>
         <?php
     }
