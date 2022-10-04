@@ -27,7 +27,7 @@ $currentTool = Tools::GetCurrentTool();
 <html>
 
 <head>
-	<title>/dev_tools/<?php echo $currentTool->id; ?> - JAN WIESEMANN.de</title>
+	<title>/dev_tools/<?php echo $currentTool->id; ?> - dev.JANWIESEMANN.de</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
@@ -96,44 +96,66 @@ $currentTool = Tools::GetCurrentTool();
 
 				<!-- Menu -->
 				<nav id="menu">
+
 					<header class="major">
-						<h2><a href="?">/dev_tools</a></h2>
+						<h2>/dev_tools</h2>
 					</header>
 
+					<?php
+					//Grouping
+
+					$byLanguage = array();
+					$general = array();
+
+					foreach (Tools::GetAllTools() as $tool)
+					{
+						if (!empty($tool->language)) //Tool is for a specific language
+						{
+							if (!array_key_exists($tool->language, $byLanguage))
+								$byLanguage[$tool->language] = array();
+
+							array_push($byLanguage[$tool->language], $tool);
+						}
+						else //General tool
+							array_push($general, $tool);
+					}
+
+					function OutPutToolGroupAsListItems(array $group, $selectedTool)
+					{
+						foreach ($group as $tool)
+						{
+					?>
+							<li <?php if ($tool === $selectedTool) echo 'class="active"'; ?>><a href="<?php echo $tool->linkInternal; ?>">/<?php echo $tool->name; ?></a></li>
+					<?php
+						}
+					}
+					?>
+
+					<header class="major">
+						<h3>/general</h3>
+					</header>
+					<ul>
+						<?php OutPutToolGroupAsListItems($general, $currentTool); ?>
+					</ul>
+
+
+					<br />
+					<header class="major">
+						<h3>/languages</h3>
+					</header>
 					<ul>
 						<?php
-						//Grouping all tools by langauge
-						$groups = array();
-						foreach (Tools::GetAllTools() as $tool)
-						{
-							if (!array_key_exists($tool->language, $groups))
-							{
-								$groups[$tool->language] = array();
-							}
-
-							array_push($groups[$tool->language], $tool);
-						}
-
-						//Adding entries for the menu system
-						foreach ($groups as $language => $tools)
+						foreach ($byLanguage as $language => $tools)
 						{
 						?>
 							<li>
 								<span class="opener<?php if ($language === $currentTool->language) echo " active"; ?>">/<?php echo $language; ?></span>
 								<ul>
-									<?php
-									foreach ($tools as $tool)
-									{
-									?>
-										<li <?php if ($tool === $currentTool) echo 'class="active"'; ?>><a href="<?php echo $tool->linkInternal; ?>">/<?php echo $tool->name; ?></a></li>
-									<?php
-									}
-									?>
+									<?php OutPutToolGroupAsListItems($tools, $currentTool); ?>
 								</ul>
-							</li>
-						<?php
+							<?php
 						}
-						?>
+							?>
 					</ul>
 				</nav>
 
