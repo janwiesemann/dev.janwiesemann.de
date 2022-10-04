@@ -8,31 +8,31 @@ class json_to_nlohmann_json extends TextToTextTool
         parent::__construct('C++', description: 'This tool can convert a plain JSON-Object to a <a href="https://github.com/nlohmann/json" target="_blank">nlohmann::json</a> C++ initializer_list.');
     }
 
-    function OutputJSDefaultInputValue(): void
+    function GetJSDefaultInputValues(): mixed
     {
-        $obj = array(
-            'string' => 'abc',
-            'int' => 123,
-            'float' => 123.456,
-            'bool' => true,
-            'null' => null,
-            'object' => array(
-                'propA' => 'value',
-                'propB' => 123,
-                'propC' => false,
-                'propD' => array(1, 2, 3)
-            ),
-            'array' => array(
-                'This is a string',
-                1,
-                array(
-                    'prop' => 'value'
+        return array(
+            'default' => array(
+                'string' => 'abc',
+                'int' => 123,
+                'float' => 123.456,
+                'bool' => true,
+                'null' => null,
+                'object' => array(
+                    'propA' => 'value',
+                    'propB' => 123,
+                    'propC' => false,
+                    'propD' => array(1, 2, 3)
                 ),
-                array(4, 5, 6)
+                'array' => array(
+                    'This is a string',
+                    1,
+                    array(
+                        'prop' => 'value'
+                    ),
+                    array(4, 5, 6)
+                )
             )
         );
-
-        echo 'JSON.stringify(' . json_encode($obj) . ', null, 4);';
     }
 
     function OutputJSBody(): void

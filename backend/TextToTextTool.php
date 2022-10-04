@@ -5,22 +5,25 @@ abstract class TextToTextTool extends SectionTool
 {
     protected abstract function OutputJSBody(): void;
 
-    protected function OutputJSDefaultInputValue(): void
+    protected function GetJSDefaultInputValues(): mixed
     {
-        echo 'null';
+        return null;
     }
 
     function IncludeSectionBody(): void
     {
 ?>
+        <h4>example values</h4>
+        <div id="exampleButtonsContainer"></div>
+
         <table>
             <thead>
                 <tr>
                     <td>
-                        <h5>Input</h5>
+                        <h4>Input</h4>
                     </td>
                     <td>
-                        <h5>Output</h5>
+                        <h4>Output</h4>
                     </td>
                 </tr>
             </thead>
@@ -41,7 +44,13 @@ abstract class TextToTextTool extends SectionTool
 
         <!-- Predefined Script section of 'TextToTextTool.php' -->
         <script>
-            let defaultValue = <?php $this->OutputJSDefaultInputValue(); ?>;
+            let defaultValues = <?php
+                                $data = $this->GetJSDefaultInputValues();
+                                if (!is_null($data) && !is_array($data)) //if data has any value and this value isn't a array, convert it to a array with just one element.
+                                    $data = array($data);
+
+                                echo json_encode($data);
+                                ?>;
 
             let jqInput = $('#input');
             let jqOutput = $('#output');
@@ -76,9 +85,38 @@ abstract class TextToTextTool extends SectionTool
                 updateInputAndOutputTextHeights();
             }
 
-            jqInput.on("input", onInputChanged)
-                .val(defaultValue)
-                .trigger('input');
+            function onExampleButtonClick() {
+                let value = this.exampleValue;
+
+                if (typeof value === 'object')
+                    value = JSON.stringify(value, null, 4);
+
+                jqInput
+                    .val(value)
+                    .trigger('input');
+
+            }
+
+            let jqExampleButtonsContainer = $('#exampleButtonsContainer');
+            let jqFirstExampleButton = null;
+            for (const [key, value] of Object.entries(defaultValues)) {
+                let button = $('<input>')
+                    .attr('type', 'button')
+                    .val(key)
+                    .click(onExampleButtonClick);
+
+                button[0].exampleValue = value;
+
+                if (jqFirstExampleButton === null)
+                    jqFirstExampleButton = button;
+
+                jqExampleButtonsContainer.append(button);
+            }
+
+            jqInput.on('input', onInputChanged);
+
+            if (jqFirstExampleButton !== null)
+                jqFirstExampleButton.trigger('click');
         </script>
 <?php
     }
