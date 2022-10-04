@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client", /* Used for Formatting */
+        "xdebug.php-debug", /* Xdebug, for debugging of PHP with Breakpints etc. */
+        "zobo.php-intellisense" /* IntelliSense support for PHP */
+    ]
+}

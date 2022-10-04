@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../../TextToTextTool.php');
+require_once(__DIR__ . '/../../TextToTextTool.php');
 
 class json_to_nlohmann_json extends TextToTextTool
 {
@@ -7,42 +7,42 @@ class json_to_nlohmann_json extends TextToTextTool
     {
         parent::__construct('C++', description: 'This tool can convert a plain JSON-Object to a <a href="https://github.com/nlohmann/json" target="_blank">nlohmann::json</a> C++ initializer_list.');
     }
-    
-    function OutputJSDefaultInputValue() : void
+
+    function OutputJSDefaultInputValue(): void
     {
         $obj = array(
-                'string' => 'abc',
-                'int' => 123,
-                'float' => 123.456,
-                'bool'=> true,
-                'null'=> null,
-                'object' => array(
-                    'propA' => 'value',
-                    'propB' => 123,
-                    'propC' => false,
-                    'propD' => array(1, 2, 3)
+            'string' => 'abc',
+            'int' => 123,
+            'float' => 123.456,
+            'bool' => true,
+            'null' => null,
+            'object' => array(
+                'propA' => 'value',
+                'propB' => 123,
+                'propC' => false,
+                'propD' => array(1, 2, 3)
+            ),
+            'array' => array(
+                'This is a string',
+                1,
+                array(
+                    'prop' => 'value'
                 ),
-                'array' => array(
-                    'This is a string',
-                    1,
-                    array(
-                        'prop' => 'value'
-                    ),
-                    array(4, 5, 6)
-                )
-            );
+                array(4, 5, 6)
+            )
+        );
 
-        echo 'JSON.stringify('.json_encode($obj).', null, 4);';
+        echo 'JSON.stringify(' . json_encode($obj) . ', null, 4);';
     }
 
-    function OutputJSBody() : void
+    function OutputJSBody(): void
     {
-        ?>
+?>
         <script>
             function getIndents(level) {
                 let ret = "";
 
-                for(let i = 0; i < level; i++) {
+                for (let i = 0; i < level; i++) {
                     ret += '    ';
                 }
 
@@ -58,7 +58,7 @@ class json_to_nlohmann_json extends TextToTextTool
                 let rows = [];
                 arr.forEach(element => {
                     let row = "";
-                    if(typeof element !== 'object' || Array.isArray(element)) {
+                    if (typeof element !== 'object' || Array.isArray(element)) {
                         row += getIndents(indentLevel);
                     }
                     row += append(indentLevel, element, arr);
@@ -73,7 +73,7 @@ class json_to_nlohmann_json extends TextToTextTool
                 ret += getIndents(indentLevel);
                 ret += '})';
 
-                if(parent !== null && !Array.isArray(parent)) {
+                if (parent !== null && !Array.isArray(parent)) {
                     ret += '\n';
                 }
 
@@ -92,19 +92,19 @@ class json_to_nlohmann_json extends TextToTextTool
                     row += key.toString();
                     row += '", ';
 
-                    if(value != null && typeof value === 'object' && !Array.isArray(value)) {
+                    if (value != null && typeof value === 'object' && !Array.isArray(value)) {
                         row += '\n';
                     }
 
                     row += append(indentLevel + 1, value, obj);
 
-                    if(value != null && typeof value === 'object') {
+                    if (value != null && typeof value === 'object') {
                         row += getIndents(indentLevel);
                     } else {
                         row += ' ';
                     }
                     row += '}';
-                    
+
                     rows.push(row);
                 }
                 indentLevel--
@@ -115,7 +115,7 @@ class json_to_nlohmann_json extends TextToTextTool
                 ret += getIndents(indentLevel);
                 ret += '}';
 
-                if(!Array.isArray(parent)) {
+                if (!Array.isArray(parent)) {
                     ret += '\n';
                 }
 
@@ -123,24 +123,23 @@ class json_to_nlohmann_json extends TextToTextTool
             }
 
             function append(indentLevel, node, parent) {
-                if(node === null || node === undefined) {
+                if (node === null || node === undefined) {
                     return "nullptr";
                 }
 
-                switch(typeof node)
-                {
+                switch (typeof node) {
                     case 'object':
-                        if(Array.isArray(node)) {
+                        if (Array.isArray(node)) {
                             return appendArray(indentLevel, node, parent);
                         } else {
                             return appendObject(indentLevel, node, parent)
                         }
 
-                    case 'string':
-                        return '"' + node + '"';
+                        case 'string':
+                            return '"' + node + '"';
 
-                    default:
-                        return node.toString();
+                        default:
+                            return node.toString();
                 }
             }
 
@@ -150,7 +149,7 @@ class json_to_nlohmann_json extends TextToTextTool
                 let str = append(0, j, null);
                 return str;
             }
-            </script>
-        <?php
+        </script>
+<?php
     }
 }

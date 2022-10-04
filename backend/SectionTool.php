@@ -5,28 +5,28 @@ require_once('ToolBase.php');
 //this should be used as a base class to add new tools
 abstract class SectionTool extends ToolBase
 {
-    protected abstract function IncludeSectionBody() : void;
+    protected abstract function IncludeSectionBody(): void;
 
-    protected function OutputDescription() : void
+    protected function OutputDescription(): void
     {
-        if($this->description !== null)
-            echo '<p>'.$this->description.'</p>';     
+        if ($this->description !== null)
+            echo '<p>' . $this->description . '</p>';
     }
 
-    function Include() : void
-	{
-        ?>
-            <section>
-                <header class="major">
-                    <h2><?php echo $this->name; ?></h2>
-                </header>
+    function Include(): void
+    {
+?>
+        <section>
+            <header class="major">
+                <h2><?php echo $this->name; ?></h2>
+            </header>
 
-                <?php
-                    $this->OutputDescription();
-                
-                    $this->IncludeSectionBody();
-                ?>        
-            </section>
-        <?php
+            <?php
+            $this->OutputDescription();
+
+            $this->IncludeSectionBody();
+            ?>
+        </section>
+<?php
     }
 }

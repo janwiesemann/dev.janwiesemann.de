@@ -13,17 +13,17 @@ abstract class ToolBase
     );
 
     //Escapes some URI-Reserved chars which might be used in the name of some programming languages like C++ or C#
-    private static function ReplaceURIUnsafeCharsInIDPart(?string $str) : ?string
+    private static function ReplaceURIUnsafeCharsInIDPart(?string $str): ?string
     {
-        if($str === null)
+        if ($str === null)
             return $str;
 
         $ret = '';
         for ($i = 0; $i < strlen($str); $i++)
         {
-            $c = $str[$i];            
-            
-            if(array_key_exists($c, static::$idStringReplaceChars))
+            $c = $str[$i];
+
+            if (array_key_exists($c, static::$idStringReplaceChars))
                 $ret .= static::$idStringReplaceChars[$c];
             else
                 $ret .= $c;
@@ -33,17 +33,17 @@ abstract class ToolBase
     }
 
     //this will build the value for the property 'ToolBase::id'
-    private static function MakeIDString(?string $language, string $name) : string
+    private static function MakeIDString(?string $language, string $name): string
     {
         $ret = static::ReplaceURIUnsafeCharsInIDPart($name);
 
-        if($language !== null)
-            $ret = static::ReplaceURIUnsafeCharsInIDPart($language).'/'.$ret; //The character '/' is not a URI-Query reserved char as per RFC 3986. See:  https://www.rfc-editor.org/rfc/rfc3986#section-3.4
+        if ($language !== null)
+            $ret = static::ReplaceURIUnsafeCharsInIDPart($language) . '/' . $ret; //The character '/' is not a URI-Query reserved char as per RFC 3986. See:  https://www.rfc-editor.org/rfc/rfc3986#section-3.4
 
         return $ret;
     }
 
-    private static function MakeGitHubLink(string $type) : string
+    private static function MakeGitHubLink(string $type): string
     {
         $reflector = new ReflectionClass($type);
 
@@ -51,7 +51,7 @@ abstract class ToolBase
 
         $relativePathToWebRoot = substr($definingFile, strlen(tools::GetWebRoot()));
 
-        return 'https://github.com/janwiesemann/dev.janwiesemann.de/blob/main'.$relativePathToWebRoot;
+        return 'https://github.com/janwiesemann/dev.janwiesemann.de/blob/main' . $relativePathToWebRoot;
     }
 
     //Defines the targeted Language (i.e. C++, C, CSharp, ...). 'null' => a general tool without a specific language.
@@ -69,15 +69,15 @@ abstract class ToolBase
     //Different links to this tool
     public readonly string $linkInternal;
     public readonly string $linkExternal;
-    
+
     public function __construct(?string $language = null, ?string $name = null, ?string $description = null)
     {
-        if($name === null) //ensure non empty name
-            $name = static::class; 
+        if ($name === null) //ensure non empty name
+            $name = static::class;
 
         $this->name = strtolower($name);
 
-        if($language !== null) //to lower case
+        if ($language !== null) //to lower case
             $language = strtolower($language);
 
         $this->language = $language;
@@ -86,11 +86,11 @@ abstract class ToolBase
 
         $this->description = $description;
 
-        $this->linkInternal = 'index.php?tool='.$this->id;
-        $this->linkExternal = 'https://dev.janwiesemann.de/'.$this->linkInternal;
+        $this->linkInternal = 'index.php?tool=' . $this->id;
+        $this->linkExternal = 'https://dev.janwiesemann.de/' . $this->linkInternal;
         $this->linkGitHub = static::MakeGitHubLink(static::class);
     }
 
     //Override this for the generation/inclusion of your code
-    abstract public function Include() : void;
+    abstract public function Include(): void;
 }
