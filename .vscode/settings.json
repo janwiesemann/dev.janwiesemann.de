@@ -5,5 +5,12 @@
     "files.trimTrailingWhitespace": true,
     "html.format.indentHandlebars": true,
     "html.format.indentInnerHtml": true,
-    "intelephense.format.braces": "allman"
+    "intelephense.format.braces": "allman",
+    "markdown.extension.toc.omittedFromToc": {
+        /* These sections will be excluded from the Table of Contents in 'README.MD' */
+        "README.MD": [
+            "# dev.JANWIESEMANN.de",
+            "# Content"
+        ]
+    }
 }

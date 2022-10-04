@@ -1,10 +1,38 @@
 # dev.JANWIESEMANN.de
 is a collection of some small and useful tool to ease your development workflow.
 
-# Embedding / API
-A list of all tools and all links can be retrieved by querying `https://dev.janwiesemann.de/index.php?json`
+# Content
+- [Embedding / API / JSON](#embedding--api--json)
+- [Contribute / How to](#contribute--how-to)
+  - [Privacy](#privacy)
+  - [Tool naming](#tool-naming)
+  - [Styling](#styling)
+  - [~~Mobile first~~](#mobile-first)
+  - [Browser support](#browser-support)
+  - [Underlying software-stack](#underlying-software-stack)
+  - [Coding style](#coding-style)
+  - [Available Base Types](#available-base-types)
+    - [ToolBase (`backend/ToolBase.php`)](#toolbase-backendtoolbasephp)
+    - [SectionTool (`backend/SectionTool.php`; parent: ToolBase)](#sectiontool-backendsectiontoolphp-parent-toolbase)
+    - [TextToTextTool (`backend/TextToTextTool.php`); parent: SectionTool)](#texttotexttool-backendtexttotexttoolphp-parent-sectiontool)
+    - [SpecialTool (`backend/special/HiddenTool.php`; parent: ToolBase)](#specialtool-backendspecialhiddentoolphp-parent-toolbase)
+  - [Including a new tool](#including-a-new-tool)
+  - [Implementation / Example](#implementation--example)
 
-# Contribute /How to
+<br/>
+
+---
+
+<br/>
+
+# Embedding / API / JSON
+A list of all tools and all links can be retrieved by querying `https://dev.janwiesemann.de/index.php?json`.
+
+> Hint: Cross-Origin is enabled via `Access-Control-Allow-Origin * ` for this JSON-Endpoint!
+
+> Hint: This is used on <https://janwiesemann.de/#devTools>.
+
+# Contribute / How to
 
 [TL;DR](#implementation--example)
 
@@ -40,8 +68,8 @@ This page will be running on [nginx](https://nginx.org/) and [php-fqm @ php 8.1]
 
 Please do us all a favor and when ever possible, use strong types! I don't want to guess what a `$nodeOfATreeOfASomething` actually represents!
 
-## Base types
-There are multiple base types for a new tool defined. Typically you want to use the `SectionTool` as a base.
+## Available Base Types
+There are multiple base types for a new tools predefined. Typically you want to use the `SectionTool` as a base.
 
 > Hint: All inheriting types need to call the constructor of `ToolBase` or its parent!
 
