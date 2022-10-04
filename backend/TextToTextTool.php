@@ -95,10 +95,12 @@ abstract class TextToTextTool extends SectionTool
                     .val(value)
                     .trigger('input');
 
+                let id = $(this).val();
+                window.location.hash = id;
             }
 
             let jqExampleButtonsContainer = $('#exampleButtonsContainer');
-            let jqFirstExampleButton = null;
+            let jqDefaultExampleButton = null;
             for (const [key, value] of Object.entries(defaultValues)) {
                 let button = $('<input>')
                     .attr('type', 'button')
@@ -107,16 +109,16 @@ abstract class TextToTextTool extends SectionTool
 
                 button[0].exampleValue = value;
 
-                if (jqFirstExampleButton === null)
-                    jqFirstExampleButton = button;
+                if (jqDefaultExampleButton === null || window.location.hash === '#' + encodeURI(key))
+                    jqDefaultExampleButton = button;
 
                 jqExampleButtonsContainer.append(button);
             }
 
             jqInput.on('input', onInputChanged);
 
-            if (jqFirstExampleButton !== null)
-                jqFirstExampleButton.trigger('click');
+            if (jqDefaultExampleButton !== null)
+                jqDefaultExampleButton.trigger('click');
         </script>
 <?php
     }
