@@ -7,8 +7,8 @@ if (isset($_GET["json"]))
 {
 	//A special switch to get all available tools as JSON. Used on https://janwiesemann.de/#devtools.
 
-	header('Content-Type', 'application/json');
-	header('Access-Control-Allow-Origin', '*');
+	header('Content-type: application/json; charset=utf-8');
+	header('Access-Control-Allow-Origin: *');
 
 	echo json_encode(Tools::GetAllTools());
 
