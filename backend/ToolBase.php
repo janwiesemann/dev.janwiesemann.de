@@ -69,6 +69,7 @@ abstract class ToolBase
     //Different links to this tool
     public readonly string $linkInternal;
     public readonly string $linkExternal;
+    public readonly string $linkGitHub;
 
     public function __construct(?string $language = null, ?string $name = null, ?string $description = null)
     {
