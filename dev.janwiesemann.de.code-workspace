@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"intelephense.format.braces": "allman",
+		"markdown.extension.toc.omittedFromToc": {
+			"README.MD": [
+				"# dev.JANWIESEMANN.de",
+				"# Content"
+			]
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			/* php support for VS-Code */
+			"bmewburn.vscode-intelephense-client",
+			"zobo.php-intellisense",
+			/* php debugging tool for VS-Code using Xdebug. Needs to be configured in your php installation */
+			"xdebug.php-debug",
+			/* quick HTML preview */
+			"george-alisson.html-preview-vscode",
+			/* Markdown support with features like automatically generated table of contents. */
+			"yzhang.markdown-all-in-one",
+			/* .json browser with a tree view, sorting and so on. */
+			"ZainChen.json"
+		]
+	}
+}
