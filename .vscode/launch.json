@@ -9,7 +9,7 @@
             "reAttach": true,
             "request": "launch",
             "type": "firefox",
-            "url": "http://localhost:8080/dev.janwiesemann.de/index.php",
+            "url": "http://localhost:8443/dev.janwiesemann.de/index.php",
             "webRoot": "${workspaceFolder}"
         },
         {
