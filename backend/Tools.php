@@ -1,5 +1,6 @@
 <?php
 require_once('ToolBase.php');
+require_once('CustomToolProvider.php');
 
 require_once(__DIR__ . '/special/HiddenTool.php');
 require_once(__DIR__ . '/special/Home.php');
@@ -41,21 +42,60 @@ class Tools
             Tools::$tools = array();
             foreach (get_declared_classes() as $type)
             {
-                if (!is_subclass_of($type, ToolBase::class)) //Type which do nit inherit from ToolBase
-                    continue;
-
-                if (is_subclass_of($type, HiddenTool::class)) //Special tool, which are hidden from the main tool list.
-                    continue;
-
                 $rc = new ReflectionClass($type);
                 if ($rc->isAbstract())
                     continue;
 
-                array_push(Tools::$tools, new $type);
+                if (is_subclass_of($type, CustomToolProvider::class))
+                {
+                    $provider = new $type;
+                    $provider->AddTools(Tools::$tools);
+                }
+                else
+                {
+                    if (!is_subclass_of($type, ToolBase::class)) //Type which do not inherit from ToolBase
+                        continue;
+
+                    if (is_subclass_of($type, HiddenTool::class)) //Special tool, which are hidden from the main tool list.
+                        continue;
+
+                    $constructor = $rc->getConstructor();
+                    if ($constructor && $constructor->getParameters()) //Type does not have a constructor without parameters
+                        continue;
+
+                    $toolInstance = new $type;
+
+                    $categoryName = $toolInstance->category !== null && $toolInstance->isGeneralTool !== true ? $toolInstance->category : '_general';
+
+                    if (!isset(Tools::$tools[$categoryName]) || Tools::$tools[$categoryName] == null)
+                        Tools::$tools[$toolInstance->category] = array();
+
+                    array_push(Tools::$tools[$categoryName], $toolInstance);
+                }
             }
         }
 
         return Tools::$tools;
+    }
+
+    private static function GetCurrentToolSearch(array $arr, string $id): ?ToolBase
+    {
+        foreach ($arr as $item)
+        {
+            if (is_subclass_of($item, ToolBase::class))
+            {
+                if ($item->id == $id)
+                    return $item;
+            }
+            else if (is_array($item))
+            {
+                $ret = Tools::GetCurrentToolSearch($item, $id);
+                if ($ret != null)
+                    return $ret;
+            }
+        }
+
+        return null;
     }
 
     //returns the current/selected tool
@@ -66,16 +106,9 @@ class Tools
             if (isset($_GET['tool']) && !empty($_GET['tool']))
             {
                 $searchID = strtolower($_GET['tool']);
-                foreach (Tools::GetAllTools() as $tool)
-                {
-                    if ($tool->id == $searchID)
-                    {
-                        //Found a tool
-                        Tools::$currentTool = $tool;
+                $tools = Tools::GetAllTools();
 
-                        break;
-                    }
-                }
+                Tools::$currentTool = Tools::GetCurrentToolSearch($tools, $searchID);
 
                 if (Tools::$currentTool === null)  //If a name was given but no tool with this ID was found
                     Tools::$currentTool = new Search();

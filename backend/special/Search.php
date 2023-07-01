@@ -30,7 +30,28 @@ class Search extends HiddenTool
             </p>
 
             <script>
-                let listOfTools = <?php echo json_encode(Tools::GetAllTools()); ?>;
+                <?php
+
+                function FlattenAndAddRecursive(&$array, $parent)
+                {
+                    foreach ($parent as $child)
+                    {
+                        if (is_subclass_of($child, ToolBase::class))
+                        {
+                            array_push($array, $child);
+                        }
+                        else if (is_array($child))
+                        {
+                            FlattenAndAddRecursive($array, $child);
+                        }
+                    }
+                }
+
+                $toolArray = array();
+                FlattenAndAddRecursive($toolArray, Tools::GetAllTools());
+                ?>
+
+                let listOfTools = <?php echo json_encode($toolArray); ?>;
 
                 function onSearchInput() {
                     let search = $(this).val().toLowerCase();

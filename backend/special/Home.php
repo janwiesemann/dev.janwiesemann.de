@@ -21,22 +21,43 @@ class Home extends HiddenTool
 				<h2>a list of tools</h2>
 			</header>
 			<p>
-				in whatever order the file system reports
+				in whatever A order.
 			</p>
 
 			<ul id="toolList">
 				<?php
 				//this section is being called by using PHPs include('');. This is why we have access to all Parameters of the function Tool->IncludeTool(...);
 
-				foreach (Tools::GetAllTools() as $tool)
+				//Print all child nodes recursive
+				function AppendRecursive(array $arr)
 				{
+					foreach ($arr as $group => $entry)
+					{
+						if (is_array($entry))
+						{
 				?>
-					<li>
-						<a href="<?php echo $tool->linkInternal; ?>"><?php echo $tool->id; ?></a>
-						<article><?php echo $tool->description; ?></article>
-					</li>
+							<li>
+								<span style="text-transform: UPPERCASE"><?php echo $group; ?></span>
+								<ul>
+									<?php AppendRecursive($entry); ?>
+								</ul>
+							</li>
+						<?php
+						}
+						else if (is_subclass_of($entry, ToolBase::class))
+						{
+						?>
+							<li>
+								<a href="<?php echo $entry->linkInternal; ?>"><?php echo $entry->name; ?></a>
+								<article><?php echo $entry->description; ?></article>
+							</li>
 				<?php
+						}
+					}
 				}
+
+				$tools = Tools::GetAllTools();
+				AppendRecursive($tools);
 				?>
 			</ul>
 		</section>

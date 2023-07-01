@@ -54,8 +54,8 @@ abstract class ToolBase
         return 'https://github.com/janwiesemann/dev.janwiesemann.de/blob/main' . $relativePathToWebRoot;
     }
 
-    //Defines the targeted Language (i.e. C++, C, CSharp, ...). 'null' => a general tool without a specific language.
-    public readonly ?string $language;
+    //Defines the targeted Language/Category (i.e. C++, C, CSharp, ...). 'null' => a general tool without a specific language.
+    public readonly ?string $category;
 
     //Name of the Tool
     public readonly string $name;
@@ -66,24 +66,32 @@ abstract class ToolBase
     //A short description of this tool
     public readonly ?string $description;
 
+    //Defines, if this tool will be placed inside of the "General" or "Language/Category" section.
+    public readonly ?bool $isGeneralTool;
+
     //Different links to this tool
     public readonly string $linkInternal;
     public readonly string $linkExternal;
     public readonly string $linkGitHub;
 
-    public function __construct(?string $language = null, ?string $name = null, ?string $description = null)
+    public function __construct(?string $category = null, ?string $name = null, ?bool $isGeneralTool = null, ?string $description = null)
     {
+        if ($category !== null) //to lower case
+            $category = strtolower($category);
+
+        $this->category = $category;
+
         if ($name === null) //ensure non empty name
             $name = static::class;
 
         $this->name = strtolower($name);
 
-        if ($language !== null) //to lower case
-            $language = strtolower($language);
+        if ($isGeneralTool === null)
+            $this->isGeneralTool = empty($this->category);
+        else
+            $this->isGeneralTool = $isGeneralTool;
 
-        $this->language = $language;
-
-        $this->id = static::MakeIDString($this->language, $this->name);
+        $this->id = static::MakeIDString($this->category, $this->name);
 
         $this->description = $description;
 

@@ -16,8 +16,8 @@ if (isset($_GET["json"]))
 }
 
 $currentTool = Tools::GetCurrentTool();
-?>
 
+?>
 <!DOCTYPE HTML>
 <!--
 	Editorial by HTML5 UP
@@ -120,42 +120,41 @@ $currentTool = Tools::GetCurrentTool();
 							array_push($general, $tool);
 					}
 
-					function OutPutToolGroupAsListItems(array $group, $selectedTool)
+
+					function OutPutToolEntry(ToolBase $tool, bool $isSelected)
 					{
-						foreach ($group as $tool)
-						{
 					?>
-							<li <?php if ($tool === $selectedTool) echo 'class="active"'; ?>><a href="<?php echo $tool->linkInternal; ?>">/<?php echo $tool->name; ?></a></li>
+						<li <?php if ($isSelected) echo 'class="active"'; ?>>
+							<a href="<?php echo $tool->linkInternal; ?>">/<?php echo $tool->name; ?></a>
+						</li>
+						<?php
+					}
+
+					function OutPutToolGroups(array $tools, ToolBase $selectedTool, bool $onlyGeneralTools)
+					{
+						foreach ($tools as $key => $value)
+						{
+							if (is_subclass_of($value, ToolBase::class)) //Direct entry without a group
+							{
+								OutPutToolEntry($value, $value == $selectedTool);
+							}
+							else if (is_array($value))
+							{
+						?>
+								<li>
+									<span class="opener<?php if ($key === $selectedTool->category) echo " active"; ?>">/<?php echo $key; ?></span>
+									<ul>
+										<?php OutPutToolGroups($value, $selectedTool, $onlyGeneralTools); ?>
+									</ul>
+								</li>
 					<?php
+							}
 						}
 					}
 					?>
 
-					<header class="major">
-						<h3>/general</h3>
-					</header>
 					<ul>
-						<?php OutPutToolGroupAsListItems($general, $currentTool); ?>
-					</ul>
-
-
-					<br />
-					<header class="major">
-						<h3>/languages</h3>
-					</header>
-					<ul>
-						<?php
-						foreach ($byLanguage as $language => $tools)
-						{
-						?>
-							<li>
-								<span class="opener<?php if ($language === $currentTool->language) echo " active"; ?>">/<?php echo $language; ?></span>
-								<ul>
-									<?php OutPutToolGroupAsListItems($tools, $currentTool); ?>
-								</ul>
-							<?php
-						}
-							?>
+						<?php OutPutToolGroups(Tools::GetAllTools(), $currentTool, true); ?>
 					</ul>
 				</nav>
 
