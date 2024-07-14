@@ -30,6 +30,13 @@ abstract class TextToTextTool extends SectionTool
             <tbody>
                 <tr style="background-color: transparent !important; border: none !important;">
                     <td style="padding: 0.5em 0.25em 0px 0px !important;">
+                        <input id="inputFromFile" type="file" value="Load from file"></input>
+                    </td>
+                    <td style="padding: 0.5em 0px 0px 0.25em !important;">
+                    </td>
+                </tr>
+                <tr style="background-color: transparent !important; border: none !important;">
+                    <td style="padding: 0.5em 0.25em 0px 0px !important;">
                         <textarea id="input" wrap="off" style="font-family: Consolas, monaco, monospace !important;"></textarea>
                     </td>
                     <td style="padding: 0.5em 0px 0px 0.25em !important;">
@@ -54,6 +61,26 @@ abstract class TextToTextTool extends SectionTool
 
             let jqInput = $('#input');
             let jqOutput = $('#output');
+            let jqInputFromFile = $('#inputFromFile');
+
+            jqInputFromFile.on('change', (event) => {
+                if (event.target.files.length <= 0)
+                    return;
+
+                const file = event.target.files[0];
+
+                if (!file.type || (!file.type.startsWith('text/') && file.type != 'application/json' && file.type != 'application/xml')) {
+                    jqInputFromFile.val(null);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.addEventListener('load', (event) => {
+                    jqInput.val(event.target.result)
+                        .trigger('input');
+                });
+                reader.readAsText(file);
+            });
 
             function updateInputAndOutputTextHeights() {
                 jqInput[0].style.height = 'auto';
