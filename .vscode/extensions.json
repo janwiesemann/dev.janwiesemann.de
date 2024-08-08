@@ -1,7 +1,7 @@
 {
     "recommendations": [
         "bmewburn.vscode-intelephense-client", /* Used for Formatting */
-        "firefox-devtools.vscode-firefox-debug", /* Used for debugging of JavaScript via Firefox. Breakpoints and values can be used inside VS-Code */
+        /*"firefox-devtools.vscode-firefox-debug", Used for debugging of JavaScript via Firefox. Breakpoints and values can be used inside VS-Code */
         "xdebug.php-debug", /* Xdebug, for debugging of PHP with Breakpints etc. */
         "yzhang.markdown-all-in-one", /* Some tools for Markdown. Used to generate the Table Of Contents in 'README.MD' */
         "zobo.php-intellisense" /* IntelliSense support for PHP */
