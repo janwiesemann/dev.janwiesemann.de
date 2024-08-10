@@ -7,7 +7,7 @@ onmessage = (event) => {
         }
 
         let bytes = [];
-        for (let i = 0; i < event.data.data.length; i += 22) {
+        for (let i = 0; i < event.data.data.length; i += 2) {
             bytes.push(parseInt(event.data.data.substr(i, 2), 16));
             if (i % 1024 == 0) {
                 postMessage({
